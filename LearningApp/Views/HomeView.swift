@@ -30,9 +30,15 @@ struct HomeView: View {
                                     destination:
                                         ContentView()
                                             .onAppear(perform: {
-                                                model.beginModule(module.id)
+                                                
+                                                // Gets the Lessons from FireStore database
+                                                model.getDatabaseLessons(module: module) {
+                                                    
+                                                    // When completed, then runs beginModule()
+                                                    model.beginModule(module.id)
+                                                }
                                             }),
-                                    tag: module.id,
+                                    tag: module.id.hash,
                                     selection: $model.currentContentSelected) {
                                     
                                         // Learning Card
@@ -44,9 +50,11 @@ struct HomeView: View {
                                     destination:
                                         TestView()
                                             .onAppear(perform: {
-                                            model.beginTest(module.id)
+                                                model.getDatabaseQuestions(module: module) {
+                                                    model.beginTest(module.id)
+                                                }
                                         }),
-                                    tag: module.id,
+                                    tag: module.id.hash,
                                     selection: $model.currentTestSelected) {
                                     
                                     // Test Card
